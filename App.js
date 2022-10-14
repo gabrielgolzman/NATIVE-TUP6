@@ -1,5 +1,15 @@
 import { useState } from "react";
-import { StyleSheet, Text, View, TextInput, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TextInput,
+  Button,
+  ScrollView,
+  FlatList,
+} from "react-native";
+import RecipeInput from "./components/RecipeInput";
+import RecipeList from "./components/RecipeList";
 
 const App = () => {
   const [recipeText, setRecipeText] = useState("");
@@ -10,30 +20,21 @@ const App = () => {
   };
 
   const addRecipeHandler = () => {
-    setRecipes((oldRecipes) => [...oldRecipes, recipeText]);
+    setRecipes((oldRecipes) => [
+      ...oldRecipes,
+      { id: Math.random().toString(), text: recipeText },
+    ]);
     setRecipeText("");
   };
 
   return (
     <View style={styles.container}>
-      <View style={styles.inputContainer}>
-        <TextInput
-          style={styles.textInput}
-          value={recipeText}
-          placeholder="Ingrese el nombre de la receta"
-          onChangeText={recipeInputHandler}
-        />
-        <View style={styles.buttonInput}>
-          <Button onPress={addRecipeHandler} title="Agregar receta" />
-        </View>
-      </View>
-      <View>
-        {recipes.map((recipe, index) => (
-          <Text style={styles.recipeItem} key={index}>
-            {recipe}
-          </Text>
-        ))}
-      </View>
+      <RecipeInput
+        addRecipeHandler={addRecipeHandler}
+        recipeText={recipeText}
+        recipeInputHandler={recipeInputHandler}
+      />
+      <RecipeList recipes={recipes} />
     </View>
   );
 };
@@ -41,28 +42,6 @@ const App = () => {
 const styles = StyleSheet.create({
   container: {
     padding: 50,
-  },
-  inputContainer: {
-    justifyContent: "center",
-  },
-  textInput: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    width: "100%",
-    marginRight: 8,
-    marginVertical: 15,
-    padding: 8,
-  },
-  buttonInput: {
-    width: "50%",
-    alignSelf: "flex-end",
-  },
-  recipeItem: {
-    margin: 8,
-    padding: 8,
-    borderRadius: 6,
-    backgroundColor: "#CB6011",
-    color: "white",
   },
 });
 
